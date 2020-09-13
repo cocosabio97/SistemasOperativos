@@ -1,0 +1,2 @@
+En la carpeta de Ejercicios mutex se encuentra la solución a distintos problemas en los que hay datos compartidos entre distintos procesos La solución está escrita en pseudocódigo.
+En la carpeta de Prácticas está la solución de las prácticas propuestas en la asignatura Sistemas Operativos de la UCM, junto con la solución de la parte avanzada de alguna de ellas.

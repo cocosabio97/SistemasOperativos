@@ -1,0 +1,43 @@
+//Problema 2 Febrero 2015	
+
+void cliente(){
+	while(true){
+		conseguirPizzas(tipoPizza);
+		comer();
+	}
+}
+
+void camarero(){
+	while(true)
+	servirPizzas();
+}
+
+int tipoPizza[2]; //El tipoPizza[0] corresponde al de pepperoni y el tipoPizza[1] al de margarita
+mutex cerrojo[2]; //Lo mismo 
+
+cond_t camarero;
+cond_t tipoCliente[2];
+mutex cerrojo[2];
+mutex camarero;
+
+void conseguirPizza(int tipoPizza){
+	lock(cerrojo[tipoPizza]);
+	while(tipoPizza[tipoPizza] == 0){
+		cond_signal(camarero);
+		cond_wait(tipocliente[tipoPizza], camarero);
+	}
+	tipoPizza[tipoPizza]--;
+	unlock(cerrojo[tipoPizza]);
+}
+
+void servirPizzas(tipoPizza){
+	lock(camarero);
+	cond_wait(camarero, camarero);
+	unlock(camarero);
+	lock(cerrojo[tipoPizza]);
+	if(tipoPizza[tipoPizza] == 0){
+		tipoPizza[tipoPizza] = 50;
+		broadcast(cliente[tipoPizza]);
+	}
+	unlock(cerrojo[tipoPizza]);
+}

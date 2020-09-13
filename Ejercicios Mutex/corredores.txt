@@ -1,0 +1,32 @@
+//El de los corredores
+
+int corredores = 0;
+mutex cerrojo;
+mutex posicion;
+int posicion = 1;
+cond_t corredores[16];
+cond_t correr;
+
+start_race(id_corredor){
+	lock(cerrojo);
+	if(corredores < 15){
+		corredores++;
+		cond_wait(correr, cerrojo);
+	}else{
+		corredores = 0;
+		cond_broadcast(correr);
+	}
+	if(id_corredor%4 == 0)
+		cond_wait(corredores[id_corredor], cerrojo);
+	unlock(cerrojo);
+}
+
+notify_arrival(id_corredor){
+	if(id_corredor%4 == 3){
+		lock(posicion);
+		printf(%d posicion, %id_corredor);
+		posicion++;
+	}else{
+		cond_signal(corredores[id_corredor+1]);
+	}
+}

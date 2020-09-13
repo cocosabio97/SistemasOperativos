@@ -1,0 +1,35 @@
+//Septiembre 2017, problema 2
+
+mutex entrada;
+mutex salida;
+cond_t acomer;
+cond_t salida;
+int posicion = 0;
+
+int entrar_comedor_sentarse(){
+	lock(entrada);
+	if(posicion < N-1){
+		lock(entrada);
+		posicion++;
+		cond_wait(acomer,entrada);
+	}else{
+		posicion = 0;
+		cond_broadcast(acomer);
+	}
+	unlock(entrada);
+	return posicion;
+}
+
+void salir_comedor(turno_salida){
+	lock(salida);
+	while(turno_salida != posicion){
+		cond_wait(salida, salida);
+	}
+	if(turno_salida == N){
+		posicion = 0;
+	}else{
+		posicion++;
+		cond_broadcast(salida);
+	}
+	unlock(salida);
+}

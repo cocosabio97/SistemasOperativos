@@ -1,0 +1,34 @@
+//El de los nadadores (que es casi igual que el de los corredores)
+
+cond_t llegada; cond_t turno[32];
+mutex mtx;
+mutex turno;
+int nadadores = 0;
+int posicion = 1;
+
+void begin_race(int id_nadador){
+	lock(mtx);
+	if(nadadores < 31){
+		nadadores++;
+		cond_wait(llegada, mtx);
+	}else{
+		nadadores = 0;
+		cond_broadcast(llegada);
+	}
+
+	if(id_nadador % 4 != 0){
+		cond_wait(turno[id_nadador], mtx);
+	}
+	unlock(mtx);
+}
+
+void notify_arrival(int id_nadador){
+	if(id_nadador % 4 == 3){
+		lock(turno);
+		printf(%d id_nadador/4 equipo, %d posicion);
+		posicion++;
+		unlock(turno);
+	}else{
+		cond_signal(turno[id_nadador+1]);
+	}
+}
